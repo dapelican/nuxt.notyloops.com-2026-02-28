@@ -1,0 +1,26 @@
+{
+  "name": "OptiLeague",
+  "short_name": "OptiLeague",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#97bf0d",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/images/brand/optileague-0192x0192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/brand/optileague-0512x0512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/brand/optileague-0512x0512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
