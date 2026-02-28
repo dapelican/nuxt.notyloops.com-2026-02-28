@@ -10,8 +10,10 @@ const password_2 = ref('');
 const route = useRoute();
 const show_password = ref(false);
 
+const { t } = useI18n();
+
 useSeoMeta({
-  title: `${$t('t_sign_up_step_2_of_2')} | OptiLeague`,
+  title: `${t('t_sign_up_step_2_of_2')} | OptiLeague`,
 });
 
 // Keep at top level to avoid hydratation issues
@@ -64,7 +66,7 @@ const signUp = async () => {
 
     await refreshSession();
     handling_request.value = false;
-    return navigateTo('/a/connection-information');
+    return navigateTo(CONNECTED_USER_LANDING_PAGE);
   } catch (error) {
     const error_message = error?.data?.error_message;
 
@@ -158,18 +160,13 @@ const resetErrors = () => {
         <hr class="separator-1">
 
         <nav class="flex-ce-ce-gap-2">
-          <button
-            v-if="!handling_request"
-            type="submit"
-            class="button-1"
+          <GenericButtonElement
+            :design_type="1"
+            button_type="submit"
+            :waiting="handling_request"
           >
             {{ $t('t_sign_up') }}
-          </button>
-
-          <LoadingSpinnerElement
-            v-if="handling_request"
-            :with_top_margin="false"
-          />
+          </GenericButtonElement>
         </nav>
       </form>
 

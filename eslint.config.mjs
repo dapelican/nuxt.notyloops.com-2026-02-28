@@ -20,9 +20,11 @@ export default withNuxt(
         objects: 'always-multiline',
       }],
       '@stylistic/semi': ['error', 'always'],
+      'curly': ['error', 'all'],
       'sort-imports': 'error',
       'vue/no-multiple-template-root': 'off',
       'vue/no-v-html': 'off',
+      'vue/prop-name-casing': ['error', 'snake_case'],
     },
   }
 );

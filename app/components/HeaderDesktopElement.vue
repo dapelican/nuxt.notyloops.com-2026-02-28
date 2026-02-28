@@ -42,19 +42,32 @@ onUnmounted(() => {
       </NuxtLink>
 
       <div class="navbar-desktop-subgroup">
-
         <NuxtLink
-          to="/protected-page-1"
+          :to="CONNECTED_USER_LANDING_PAGE"
           class="navbar-link"
         >
-          {{ $t('t_protected_page_1') }}
+          {{ $t('t_manage_notes') }}
         </NuxtLink>
 
         <NuxtLink
-          to="/protected-page-2"
+          to="/manage-tags/page/1"
           class="navbar-link"
         >
-          {{ $t('t_protected_page_2') }}
+          {{ $t('t_manage_tags') }}
+        </NuxtLink>
+
+        <NuxtLink
+          to="/review"
+          class="navbar-link"
+        >
+          {{ $t('t_review') }}
+        </NuxtLink>
+
+        <NuxtLink
+          to="/share"
+          class="navbar-link"
+        >
+          {{ $t('t_share') }}
         </NuxtLink>
 
         <section

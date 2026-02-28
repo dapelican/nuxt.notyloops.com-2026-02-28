@@ -12,6 +12,8 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  // Standard vue prop name for v-model
+  // eslint-disable-next-line vue/prop-name-casing
   modelValue: {
     type: Boolean,
     default: false,

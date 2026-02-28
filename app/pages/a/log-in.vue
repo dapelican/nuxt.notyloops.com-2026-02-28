@@ -1,8 +1,15 @@
 <script setup>
 import isEmail from 'validator/lib/isEmail';
 
+// const { loggedIn: logged_in } = useUserSession();
+// if (logged_in.value) {
+//   navigateTo(CONNECTED_USER_LANDING_PAGE);
+// }
+
+const { t } = useI18n();
+
 useSeoMeta({
-  title: `${$t('t_log_in')} | OptiLeague`,
+  title: `${t('t_log_in')} | OptiLeague`,
 });
 
 const { fetch: refreshSession } = useUserSession();
@@ -41,7 +48,7 @@ const logIn = async () => {
 
     await refreshSession();
     handling_request.value = false;
-    return navigateTo('/a/connection-information');
+    return navigateTo(CONNECTED_USER_LANDING_PAGE);
   } catch (error) {
     const error_message = error?.data?.error_message;
 
@@ -172,19 +179,13 @@ const resetErrors = () => {
       <hr class="separator-1">
 
       <nav class="flex-ce-ce-gap-2">
-        <button
-          type="submit"
-          class="button-1"
-          :disabled="handling_request"
-          :class="{ 'button-1-disabled': handling_request }"
+        <GenericButtonElement
+          :design_type="1"
+          button_type="submit"
+          :waiting="handling_request"
         >
           {{ $t('t_log_in') }}
-        </button>
-
-        <LoadingSpinnerElement
-          v-if="handling_request"
-          :with_top_margin="false"
-        />
+        </GenericButtonElement>
       </nav>
 
       <hr class="separator-1">

@@ -1,8 +1,10 @@
 <script setup>
 import isEmail from 'validator/lib/isEmail';
 
+const { t } = useI18n();
+
 useSeoMeta({
-  title: `${$t('t_password_forgotten')} | OptiLeague`,
+  title: `${t('t_password_forgotten')} | OptiLeague`,
 });
 
 const email = ref('');
@@ -114,19 +116,13 @@ const resetErrors = () => {
       <hr class="separator-1">
 
       <nav class="flex-ce-ce-gap-2">
-        <button
-          type="submit"
-          class="button-1"
-          :disabled="handling_request"
-          :class="{ 'button-1-disabled': handling_request }"
+        <GenericButtonElement
+          :design_type="1"
+          button_type="submit"
+          :waiting="handling_request"
         >
           {{ $t('t_submit') }}
-        </button>
-
-        <LoadingSpinnerElement
-          v-if="handling_request"
-          :with_top_margin="false"
-        />
+        </GenericButtonElement>
       </nav>
     </form>
 

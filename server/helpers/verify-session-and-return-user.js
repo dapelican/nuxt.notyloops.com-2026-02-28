@@ -1,10 +1,10 @@
 'use strict';
 
+import { DateTime } from 'luxon';
+
 import {
   SESSION_RENEWAL_THRESHOLD_IN_MINUTES,
 } from './constants.js';
-
-import { DateTime } from 'luxon';
 
 import {
   executeSQLQuery,
@@ -55,7 +55,7 @@ const verifySessionAndReturnUser = async (event) => {
         WHERE id = $2`,
         [
           new_expires_at,
-          session.session_token_id
+          session.session_token_id,
         ]
       );
 

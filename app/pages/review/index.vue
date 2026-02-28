@@ -1,13 +1,15 @@
 <script setup>
 definePageMeta({ middleware: 'auth' });
 
+const { t } = useI18n();
+
 useSeoMeta({
-  title: `${$t('t_protected_page_2')} | OptiLeague`,
+  title: `${t('t_review_notes')} | OptiLeague`,
 });
 </script>
 
 <template>
   <h1 class="center">
-    Protected page 2
+    {{ $t('t_review_notes') }}
   </h1>
 </template>

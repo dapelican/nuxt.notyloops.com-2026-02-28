@@ -8,8 +8,10 @@ const props = defineProps({
 
 const status_code = computed(() => props.error?.statusCode ?? props.error?.status ?? 500);
 
+const { t } = useI18n();
+
 useSeoMeta({
-  title: `${$t('t_error')} ${status_code.value} | OptiLeague`,
+  title: `${t('t_error')} ${status_code.value} | OptiLeague`,
 });
 </script>
 
@@ -27,9 +29,11 @@ useSeoMeta({
 
     <hr class="separator-1">
 
-    <NuxtLink
-      to="/"
-      class="button-1"
-    >{{ $t('t_go_back_home') }}</NuxtLink>
+    <GenericButtonElement
+      :design_type="1"
+      @button_clicked="navigateTo('/')"
+    >
+      {{ $t('t_go_back_home') }}
+    </GenericButtonElement>
   </section>
 </template>

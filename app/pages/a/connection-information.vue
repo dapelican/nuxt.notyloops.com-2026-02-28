@@ -3,8 +3,10 @@ import isEmail from 'validator/lib/isEmail';
 
 definePageMeta({ middleware: 'auth' });
 
+const { t } = useI18n();
+
 useSeoMeta({
-  title: `${$t('t_my_connection_information')} | OptiLeague`,
+  title: `${t('t_my_connection_information')} | OptiLeague`,
 });
 
 const current_email = ref('');
@@ -142,180 +144,176 @@ const resetPasswordErrors = () => {
       </h1>
 
       <main class="centered-max-width-400">
-      <section>
-        <h2>{{ $t('t_email') }}</h2>
+        <section>
+          <h2>{{ $t('t_email') }}</h2>
 
-        <p v-if="!show_new_email">
-          {{ current_email }}
-        </p>
-
-        <button
-          v-if="!show_new_email"
-          class="button-2"
-          @click="show_new_email = true"
-        >
-          {{ $t('t_change_email_address') }}
-        </button>
-
-        <form
-          v-if="show_new_email"
-          @submit.prevent="changeEmail"
-        >
-          <label for="new-email">{{ $t('t_new_email') }}</label>
-          <input
-            id="new-email"
-            v-model="new_email"
-            type="text"
-            name="new-email"
-            autocomplete="email"
-            class="input-type-text"
-            required
-            @focus="resetEmailErrors"
-          >
-
-          <p
-            v-if="error_invalid_email"
-            class="alert-danger"
-          >
-            {{ $t('t_enter_valid_email_address') }}
+          <p v-if="!show_new_email">
+            {{ current_email }}
           </p>
 
-          <p
-            v-if="error_email_already_in_use"
-            class="alert-danger"
+          <GenericButtonElement
+            v-if="!show_new_email"
+            :design_type="2"
+            @button_clicked="show_new_email = true"
           >
-            {{ $t('t_email_already_used') }}
-          </p>
+            {{ $t('t_change_email_address') }}
+          </GenericButtonElement>
 
-          <hr class="separator-1">
-
-          <nav class="flex-ce-ce-gap-2">
-            <button
-              class="button-2"
-              @click="show_new_email = false"
+          <form
+            v-if="show_new_email"
+            @submit.prevent="changeEmail"
+          >
+            <label for="new-email">{{ $t('t_new_email') }}</label>
+            <input
+              id="new-email"
+              v-model="new_email"
+              type="text"
+              name="new-email"
+              autocomplete="email"
+              class="input-type-text"
+              required
+              @focus="resetEmailErrors"
             >
-              {{ $t('t_cancel') }}
-            </button>
 
-            <button
-              type="submit"
-              class="button-1"
-              :disabled="handling_request"
-              :class="{ 'button-1-disabled': handling_request }"
+            <p
+              v-if="error_invalid_email"
+              class="alert-danger"
             >
-              {{ $t('t_change') }}
-            </button>
-          </nav>
-        </form>
-      </section>
+              {{ $t('t_enter_valid_email_address') }}
+            </p>
 
-      <hr class="separator-1">
+            <p
+              v-if="error_email_already_in_use"
+              class="alert-danger"
+            >
+              {{ $t('t_email_already_used') }}
+            </p>
 
-      <section>
-        <h2>{{ $t('t_password') }}</h2>
+            <hr class="separator-1">
 
-        <button
-          v-if="!show_new_password"
-          class="button-2"
-          @click="show_new_password = true"
-        >
-          {{ $t('t_change_password') }}
-        </button>
-
-        <form
-          v-if="show_new_password"
-          @submit.prevent="changePassword"
-        >
-          <label for="current-password">{{ $t('t_current_password') }}</label>
-          <input
-            id="current-password"
-            v-model="current_password"
-            :type="show_passwords ? 'text' : 'password'"
-            name="current-password"
-            autocomplete="password"
-            class="input-type-password"
-            required
-            @focus="resetPasswordErrors"
-          >
-
-          <hr class="separator-0-5">
-
-          <label for="new-password-1">{{ $t('t_new_password') }}</label>
-          <input
-            id="new-password-1"
-            v-model="new_password_1"
-            :type="show_passwords ? 'text' : 'password'"
-            name="new-password-1"
-            autocomplete="password"
-            class="input-type-password"
-            required
-            @focus="resetPasswordErrors"
-          >
-
-          <hr class="separator-0-5">
-
-          <label for="new-password-2">{{ $t('t_confirm_new_password') }}</label>
-          <input
-            id="new-password-2"
-            v-model="new_password_2"
-            :type="show_passwords ? 'text' : 'password'"
-            name="new-password-2"
-            autocomplete="password"
-            class="input-type-password"
-            required
-            @focus="resetPasswordErrors"
-          >
-
-          <section class="show-password">
-            <label for="toggle-password">
-              <input
-                id="toggle-password"
-                v-model="show_passwords"
-                type="checkbox"
+            <nav class="flex-ce-ce-gap-2">
+              <GenericButtonElement
+                :design_type="2"
+                @button_clicked="show_new_email = false"
               >
-              {{ $t('t_show_passwords') }}
-            </label>
-          </section>
+                {{ $t('t_cancel') }}
+              </GenericButtonElement>
 
-          <p
-            v-if="error_invalid_password"
-            class="alert-danger"
+              <GenericButtonElement
+                :design_type="1"
+                button_type="submit"
+                :waiting="handling_request"
+              >
+                {{ $t('t_change') }}
+              </GenericButtonElement>
+            </nav>
+          </form>
+        </section>
+
+        <hr class="separator-1">
+
+        <section>
+          <h2>{{ $t('t_password') }}</h2>
+
+          <GenericButtonElement
+            v-if="!show_new_password"
+            :design_type="2"
+            @button_clicked="show_new_password = true"
           >
-            {{ $t('t_enter_new_identical_passwords') }}
-          </p>
+            {{ $t('t_change_password') }}
+          </GenericButtonElement>
 
-          <p
-            v-if="error_wrong_credentials"
-            class="alert-danger"
+          <form
+            v-if="show_new_password"
+            @submit.prevent="changePassword"
           >
-            {{ $t('t_current_password_incorrect') }}
-          </p>
-
-          <hr class="separator-1">
-
-          <nav class="flex-ce-ce-gap-2">
-            <button
-              class="button-2"
-              @click="show_new_password = false"
+            <label for="current-password">{{ $t('t_current_password') }}</label>
+            <input
+              id="current-password"
+              v-model="current_password"
+              :type="show_passwords ? 'text' : 'password'"
+              name="current-password"
+              autocomplete="password"
+              class="input-type-password"
+              required
+              @focus="resetPasswordErrors"
             >
-              {{ $t('t_cancel') }}
-            </button>
 
-            <button
-              type="submit"
-              class="button-1"
-              :disabled="handling_request"
-              :class="{ 'button-1-disabled': handling_request }"
+            <hr class="separator-0-5">
+
+            <label for="new-password-1">{{ $t('t_new_password') }}</label>
+            <input
+              id="new-password-1"
+              v-model="new_password_1"
+              :type="show_passwords ? 'text' : 'password'"
+              name="new-password-1"
+              autocomplete="password"
+              class="input-type-password"
+              required
+              @focus="resetPasswordErrors"
             >
-              {{ $t('t_change') }}
-            </button>
-          </nav>
-        </form>
-      </section>
-    </main>
+
+            <hr class="separator-0-5">
+
+            <label for="new-password-2">{{ $t('t_confirm_new_password') }}</label>
+            <input
+              id="new-password-2"
+              v-model="new_password_2"
+              :type="show_passwords ? 'text' : 'password'"
+              name="new-password-2"
+              autocomplete="password"
+              class="input-type-password"
+              required
+              @focus="resetPasswordErrors"
+            >
+
+            <section class="show-password">
+              <label for="toggle-password">
+                <input
+                  id="toggle-password"
+                  v-model="show_passwords"
+                  type="checkbox"
+                >
+                {{ $t('t_show_passwords') }}
+              </label>
+            </section>
+
+            <p
+              v-if="error_invalid_password"
+              class="alert-danger"
+            >
+              {{ $t('t_enter_new_identical_passwords') }}
+            </p>
+
+            <p
+              v-if="error_wrong_credentials"
+              class="alert-danger"
+            >
+              {{ $t('t_current_password_incorrect') }}
+            </p>
+
+            <hr class="separator-1">
+
+            <nav class="flex-ce-ce-gap-2">
+              <GenericButtonElement
+                :design_type="2"
+                @button_clicked="show_new_password = false"
+              >
+                {{ $t('t_cancel') }}
+              </GenericButtonElement>
+
+              <GenericButtonElement
+                :design_type="1"
+                button_type="submit"
+                :waiting="handling_request"
+              >
+                {{ $t('t_change') }}
+              </GenericButtonElement>
+            </nav>
+          </form>
+        </section>
+      </main>
     </template>
-
-
   </section>
 </template>
 

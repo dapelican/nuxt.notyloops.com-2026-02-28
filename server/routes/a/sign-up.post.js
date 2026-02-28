@@ -17,8 +17,6 @@ import {
   setResponseStatus,
 } from 'h3';
 
-import { v4 as uuidv4 } from 'uuid';
-
 import bcrypt from 'bcrypt';
 
 import {
@@ -32,6 +30,8 @@ import {
 import {
   sendEmail,
 } from '../../services/smtp2go/send-email.js';
+
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   validateEmail,

@@ -1,8 +1,10 @@
 <script setup>
 import isEmail from 'validator/lib/isEmail';
 
+const { t } = useI18n();
+
 useSeoMeta({
-  title: `${$t('t_sign_up_step_1_of_2')} | OptiLeague`,
+  title: `${t('t_sign_up_step_1_of_2')} | OptiLeague`,
 });
 
 const email = ref('');
@@ -130,18 +132,13 @@ const resetErrors = () => {
       <hr class="separator-1">
 
       <nav class="flex-ce-ce-gap-2">
-        <button
-          v-if="!handling_request"
-          type="submit"
-          class="button-1"
+        <GenericButtonElement
+          :design_type="1"
+          button_type="submit"
+          :waiting="handling_request"
         >
           {{ $t('t_confirm_email_address') }}
-        </button>
-
-        <LoadingSpinnerElement
-          v-if="handling_request"
-          :with_top_margin="false"
-        />
+        </GenericButtonElement>
       </nav>
     </form>
 

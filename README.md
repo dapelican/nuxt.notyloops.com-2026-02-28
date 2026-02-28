@@ -36,3 +36,5 @@
 ## database initialization
 
 ## authentication
+
+## Nuxt: what happend when a page does not exist
