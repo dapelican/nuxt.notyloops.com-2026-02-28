@@ -155,6 +155,13 @@ onUnmounted(() => {
             <span class="desktop-only">{{ $t('t_reorder') }}</span>
           </GenericSecondaryButtonElement>
 
+          <!-- <GenericSecondaryActionElement
+            icon="uil:arrows-v-alt"
+            text="$t('t_reorder')"
+            with_angles
+            @secondary_action_clicked="handleActionBarClick('show_order_options')"
+          /> -->
+
           <GenericSecondaryButtonElement
             :design_type="show_search_input ? 1 : 2"
             icon="uil:search"

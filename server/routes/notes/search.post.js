@@ -69,7 +69,7 @@ export default defineEventHandler(async (event) => {
       ? sort_order
       : DEFAULT_SORT_ORDER;
 
-    const where_clause_list = ['n.user_id = $1'];
+    const where_clause_list = ['n.user_id = $1 and n.deleted_at IS NULL'];
     const parameter_list = [user.id];
 
     if (search_term) {

@@ -30,10 +30,17 @@ export default defineEventHandler(async (event) => {
 
     if (user === null) {
       setResponseStatus(event, HTTP_CODE_401_UNAUTHORIZED);
-      return { error_message: 'error_unauthorized' };
+
+      return {
+        error_message: 'error_unauthorized',
+      };
     }
 
-    const { title, note_details } = await readBody(event);
+    const {
+      note_details,
+      tag_id_list,
+      title,
+    } = await readBody(event);
 
     if (!title) {
       setResponseStatus(event, HTTP_CODE_400_BAD_REQUEST);
@@ -67,9 +74,20 @@ export default defineEventHandler(async (event) => {
       );
     }
 
+    if (Array.isArray(tag_id_list) && tag_id_list.length > 0) {
+      for (const tag_id of tag_id_list) {
+        await executeSQLQuery(
+          'INSERT INTO note_tags (user_id, note_id, tag_id) VALUES ($1, $2, $3)',
+          [user.id, note_id, tag_id]
+        );
+      }
+    }
+
     setResponseStatus(event, HTTP_CODE_201_CREATED);
 
-    return {};
+    return {
+      success: true,
+    };
   } catch (error) {
     /* c8 ignore next */
     return handleBackendError(error, event);

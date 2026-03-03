@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const {
-      rows: tag_list,
+      rows: all_user_tag_list,
     } = await executeSQLQuery(
       'SELECT id, label FROM tags WHERE user_id = $1 ORDER BY label ASC',
       [user.id]
@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
     setResponseStatus(event, HTTP_CODE_200_OK);
 
     return {
-      tag_list,
+      all_user_tag_list,
     };
   } catch (error) {
     /* c8 ignore next */

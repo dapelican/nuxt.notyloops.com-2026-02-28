@@ -1,5 +1,9 @@
 <script setup>
 const props = defineProps({
+  button_type: {
+    type: String,
+    default: 'button',
+  },
   design_type: {
     type: Number,
     required: true,
@@ -9,16 +13,13 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  button_type: {
-    type: String,
-    default: 'button',
-  },
 });
 
 const emit = defineEmits(['button_clicked']);
 </script>
 
 <template>
+  <!-- GenericSecondaryButtonElement.vue -->
   <button
     :type="props.button_type"
     :class="[
@@ -65,6 +66,12 @@ const emit = defineEmits(['button_clicked']);
   background-color: inherit;
   border: 1px solid var(--color-main);
   color: var(--color-main);
+}
+
+.button-3 {
+  background-color: var(--color-dangerous-action);
+  border: 1px solid var(--color-dangerous-action);
+  color: var(--color-text-on-button);
 }
 
 .spin {

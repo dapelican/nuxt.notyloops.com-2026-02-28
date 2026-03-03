@@ -39,6 +39,7 @@ defineExpose({ toggleTheme });
 </script>
 
 <template>
+  <!-- ThemeToggleElement.vue -->
   <section
     class="theme-toggle"
     @click="toggleTheme"

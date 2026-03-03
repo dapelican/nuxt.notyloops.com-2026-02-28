@@ -6,6 +6,8 @@ import {
 export const useSearchAndSelectItems = (key) => {
   const route = useRoute();
 
+  const all_user_tag_list = useState('all_user_tag_list', () => []);
+
   const page_number = computed(() => {
     const n = Number(route.params.page_number);
     if (!Number.isInteger(n) || n < 1) {
@@ -20,14 +22,7 @@ export const useSearchAndSelectItems = (key) => {
 
   const selected_item_id_set = useState(`selected_item_id_set_${key}`, () => new Set());
 
-  const sort_option = useState(`sort_option_${key}`, () => {
-    if (key === ITEM_TYPE_TAG) {
-      return 'label:asc';
-    } else if (key === ITEM_TYPE_NOTE) {
-      return 'title:asc';
-    }
-    return '';
-  });
+  const sort_option = useState(`sort_option_${key}`, () => 'created_at:desc');
 
   const search_criteria_sort_by = computed(() => sort_option.value.split(':').at(0));
   const search_criteria_sort_order = computed(() => sort_option.value.split(':').at(1));
@@ -72,7 +67,7 @@ export const useSearchAndSelectItems = (key) => {
         && page_number.value > 1
       ) {
         const max_page = Math.ceil(searched_item_id_set.value.size / items_per_page);
-        navigateTo(`/manage-tags/page/${max_page}`);
+        navigateTo(`/manage-${key}s/page/${max_page}`);
       }
     } catch (error) {
       if (current_fetch !== fetch_counter) {
@@ -105,7 +100,10 @@ export const useSearchAndSelectItems = (key) => {
     }
 
     if (key === ITEM_TYPE_NOTE) {
+      search_criteria_tag_id_set.value = new Set([]);
+
       sort_option.value = 'title:asc';
+
       if (page_number.value === 1) {
         searchItems();
       } else {
@@ -115,6 +113,7 @@ export const useSearchAndSelectItems = (key) => {
   };
 
   return {
+    all_user_tag_list,
     clearSelection,
     current_page_item_list,
     handling_request,

@@ -7,9 +7,27 @@ useSeoMeta({
   title: `${t('t_add_note')} | OptiLeague`,
 });
 
-const title = ref('');
-const note_details = ref([]);
 const handling_request = ref(false);
+const note_details = ref([]);
+const selected_tag_id_list = ref([]);
+const title = ref('');
+
+const {
+  all_user_tag_list,
+} = useSearchAndSelectItems(ITEM_TYPE_TAG);
+
+const {
+  data: tag_data,
+  error: tag_error,
+} = await useFetch('/tags/get-user-tags');
+
+if (tag_error.value) {
+  handleFrontendError(null, tag_error.value.data?.error_message);
+}
+
+if (tag_data.value) {
+  all_user_tag_list.value = tag_data.value.all_user_tag_list;
+}
 
 const addBlock = () => {
   note_details.value.push({
@@ -55,6 +73,10 @@ const computed_details = computed(() => {
   });
 });
 
+const updateSelectedTagIdList = (new_tag_id_list) => {
+  selected_tag_id_list.value = new_tag_id_list;
+};
+
 const createNote = async () => {
   handling_request.value = true;
 
@@ -69,6 +91,7 @@ const createNote = async () => {
           to_be_hidden: d.to_be_hidden,
           is_correct: d.is_correct,
         })),
+        tag_id_list: selected_tag_id_list.value,
       },
     });
 
@@ -76,6 +99,8 @@ const createNote = async () => {
   } catch (error) {
     const error_message = error?.data?.error_message;
     handleFrontendError(error, error_message);
+  } finally {
+    handling_request.value = false;
   }
 };
 </script>
@@ -88,7 +113,7 @@ const createNote = async () => {
 
     <form @submit.prevent="createNote">
       <h2>
-        Titre
+        {{ $t('t_title') }}
       </h2>
 
       <input
@@ -101,7 +126,7 @@ const createNote = async () => {
       >
 
       <h2>
-        Contenu
+        {{ $t('t_content') }}
       </h2>
 
       <div
@@ -125,9 +150,13 @@ const createNote = async () => {
             />
           </span>
         </h3>
-        <textarea
+        <!-- <textarea
           v-model="note_details[index].html_content"
-          class="input-type-text textarea"
+          class="input-type-text"
+        /> -->
+
+        <TiptapEditor
+          v-model="note_details[index].html_content"
         />
 
         <div class="checkboxes-with-trash">
@@ -187,6 +216,16 @@ const createNote = async () => {
           Generate audio (popup)
         </span>
       </div>
+
+      <h2>
+        {{ $t('t_tags') }}
+      </h2>
+
+      <SelectTagsInputElements
+        :tag_list="all_user_tag_list"
+        :selected_tag_id_list="selected_tag_id_list"
+        @update:selected_tag_id_list="updateSelectedTagIdList"
+      />
 
       <ul>
         <li>

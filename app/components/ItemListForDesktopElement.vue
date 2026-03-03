@@ -44,7 +44,14 @@ const isItemSelected = (item_id) => selected_item_id_set.value.has(item_id);
 
 <template>
   <!-- ItemListForDesktopElement.vue -->
-  <table class="items-table">
+  <section v-if="current_page_item_list.length === 0">
+    {{ $t('t_no_result_matching_your_search') }}
+  </section>
+
+  <table
+    v-else
+    class="items-table"
+  >
     <thead>
       <tr>
         <th class="col-checkbox" />

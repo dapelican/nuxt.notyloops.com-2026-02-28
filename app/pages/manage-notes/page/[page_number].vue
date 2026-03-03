@@ -24,13 +24,39 @@ if (count_data.value) {
 }
 
 const {
+  all_user_tag_list,
   handling_request,
   page_number,
   reinitializeSearch,
+  search_criteria_tag_id_set,
   sort_option,
   search_criteria_term,
   searchItems,
 } = useSearchAndSelectItems(ITEM_TYPE_NOTE);
+
+const {
+  data: tag_data,
+  error: tag_error,
+} = await useFetch('/tags/get-user-tags');
+
+if (tag_error.value) {
+  handleFrontendError(null, tag_error.value.data?.error_message);
+}
+
+if (tag_data.value) {
+  all_user_tag_list.value = tag_data.value.all_user_tag_list;
+}
+
+const search_criteria_tag_id_list = computed(() => Array.from(search_criteria_tag_id_set.value));
+
+const onTagFilterChange = (new_selected_tag_id_list) => {
+  search_criteria_tag_id_set.value = new Set(new_selected_tag_id_list);
+  if (page_number.value !== 1) {
+    navigateTo('/manage-notes/page/1');
+  } else {
+    searchItems();
+  }
+};
 
 // action bar actions
 const show_order_options = ref(false);
@@ -205,7 +231,12 @@ onUnmounted(() => {
             </label>
           </fieldset>
 
-          <SelectTagsInputElements v-if="show_filter_tags_input" />
+          <SelectTagsInputElements
+            v-if="show_filter_tags_input"
+            :tag_list="all_user_tag_list"
+            :selected_tag_id_list="search_criteria_tag_id_list"
+            @update:selected_tag_id_list="onTagFilterChange"
+          />
 
           <GenericSearchInputTestElement
             v-if="show_search_input"
@@ -214,6 +245,8 @@ onUnmounted(() => {
             @search="onSearchInput"
           />
         </div>
+
+        <hr class="separator-2">
 
         <SelectableItemsElement
           :item_type="ITEM_TYPE_NOTE"

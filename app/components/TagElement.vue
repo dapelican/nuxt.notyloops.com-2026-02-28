@@ -18,6 +18,7 @@ const emit = defineEmits(['remove_tag']);
 </script>
 
 <template>
+  <!-- TagElement.vue -->
   <section class="tag">
     <span>
       {{ label }}

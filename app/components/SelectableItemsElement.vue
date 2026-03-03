@@ -190,15 +190,36 @@ const selectAllPages = () => {
         </a>
       </section>
 
-      <section class="actions-on-selected-actions">
-        <DeleteSelectedTagsPopup v-if="item_type === ITEM_TYPE_TAG">
+      <section
+        v-if="item_type === ITEM_TYPE_TAG"
+        class="actions-on-selected-actions"
+      >
+        <DeleteSelectedTagsPopup>
           <GenericSecondaryButtonElement
-            :design_type="2"
+            :design_type="3"
             icon="uil:trash-alt"
           >
             <span class="desktop-only">{{ $t('t_delete') }}</span>
           </GenericSecondaryButtonElement>
         </DeleteSelectedTagsPopup>
+      </section>
+
+      <section
+        v-if="item_type === ITEM_TYPE_NOTE"
+        class="actions-on-selected-actions"
+      >
+        <AddTagsToNotesPopup :selected_note_id_set="selected_item_id_set" />
+
+        <RemoveTagsFromNotesPopup :selected_note_id_set="selected_item_id_set" />
+
+        <DeleteSelectedNotesPopup>
+          <GenericSecondaryButtonElement
+            :design_type="3"
+            icon="uil:trash-alt"
+          >
+            <span class="desktop-only">{{ $t('t_delete') }}</span>
+          </GenericSecondaryButtonElement>
+        </DeleteSelectedNotesPopup>
       </section>
     </div>
 
@@ -219,7 +240,7 @@ const selectAllPages = () => {
     <PaginationElement
       :current_page="page_number"
       :total_pages="total_pages"
-      base_path="/manage-tags/page/"
+      :base_path="`/manage-${item_type}s/page/`"
     />
   </section>
 </template>

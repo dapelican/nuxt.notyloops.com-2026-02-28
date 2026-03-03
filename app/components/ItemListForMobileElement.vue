@@ -17,7 +17,15 @@ const isItemSelected = (item_id) => selected_item_id_set.value.has(item_id);
 </script>
 
 <template>
-  <section class="item-card-list">
+  <!-- ItemListForMobileElement.vue -->
+  <section v-if="current_page_item_list.length === 0">
+    {{ $t('t_no_result_matching_your_search') }}
+  </section>
+
+  <section
+    v-else
+    class="item-card-list"
+  >
     <div
       v-for="item in current_page_item_list"
       :key="item.id"

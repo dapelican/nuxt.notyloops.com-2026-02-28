@@ -1,62 +1,51 @@
 <script setup>
-const {
-  search_criteria_tag_id_set,
-} = useSearchAndSelectItems(ITEM_TYPE_NOTE);
+const props = defineProps({
+  tag_list: {
+    type: Array,
+    required: true,
+  },
+  selected_tag_id_list: {
+    type: Array,
+    default: () => [],
+  },
+});
 
-const all_tag_list = ref([]);
-const tag_option_list = ref([]);
-
-// search tags with sort by label asc
-const {
-  data: tag_data,
-  error: tag_error,
-} = await useFetch('/tags/get-user-tags');
-
-if (tag_error.value) {
-  handleFrontendError(null, tag_error.value.data?.error_message);
-}
-
-if (tag_data.value) {
-  all_tag_list.value = tag_data.value.tag_list;
-  tag_option_list.value = tag_data.value.tag_list
-    .filter((tag) => !search_criteria_tag_id_set.value.has(tag.id));
-}
+const emit = defineEmits(['update:selected_tag_id_list']);
 
 const tag_search_input = ref('');
 
-const selected_tag_list = computed(() => {
-  return Array.from(search_criteria_tag_id_set.value).map((tag_id) => {
-    return all_tag_list.value.find((tag) => tag.id === tag_id);
-  }).filter(Boolean);
-});
+const local_tag_option_list = computed(() =>
+  props.tag_list.filter((tag) => !props.selected_tag_id_list.includes(tag.id))
+);
+
+const selected_tag_list = computed(() =>
+  props.selected_tag_id_list
+    .map((tag_id) => props.tag_list.find((tag) => tag.id === tag_id))
+    .filter(Boolean)
+);
 
 const filtered_tag_list = computed(() => {
   if (!tag_search_input.value.trim()) {
     return [];
   }
   const query = tag_search_input.value.trim().toLowerCase();
-  return tag_option_list.value.filter((tag) => tag.label.toLowerCase().includes(query));
+  return local_tag_option_list.value.filter((tag) => tag.label.toLowerCase().includes(query));
 });
 
 const addTag = (tag_id) => {
-  search_criteria_tag_id_set.value.add(tag_id);
-  tag_option_list.value = tag_option_list.value.filter((tag) => tag.id !== tag_id);
+  emit('update:selected_tag_id_list', [...props.selected_tag_id_list, tag_id]);
   tag_search_input.value = '';
 };
 
 const removeTag = (tag_id) => {
-  search_criteria_tag_id_set.value.delete(tag_id);
-  tag_option_list.value = tag_option_list.value.filter((tag) => tag.id !== tag_id);
+  emit('update:selected_tag_id_list', props.selected_tag_id_list.filter((id) => id !== tag_id));
 };
 </script>
 
 <template>
+  <!-- SelectTagsInputElements.vue -->
   <section class="select-tags-input-elements">
-    search_criteria_tag_id_set: {{ search_criteria_tag_id_set }}
-    <header>
-      <span>
-        {{ $t('t_selected_tags_with_colon') }}
-      </span>
+    <header class="header">
       <tag-element
         v-for="tag in selected_tag_list"
         :id="tag.id"
@@ -67,7 +56,7 @@ const removeTag = (tag_id) => {
       />
     </header>
 
-    <main>
+    <main class="main">
       <div class="tag-search-wrapper">
         <input
           v-model="tag_search_input"
@@ -94,6 +83,16 @@ const removeTag = (tag_id) => {
 </template>
 
 <style scoped>
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.main {
+  margin-top: 1rem;
+}
+
 .tag-search-wrapper {
   position: relative;
   width: 100%;
