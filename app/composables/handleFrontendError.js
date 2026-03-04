@@ -8,6 +8,9 @@ export const handleFrontendError = (error, message) => {
     case 'error_no_user_found':
       navigateTo('/a/log-in');
       break;
+    case 'error_unauthorized':
+      navigateTo('/a/log-in');
+      break;
     case 'invalid_url':
       throw createError({ statusCode: 404, fatal: true });
     default:
@@ -15,7 +18,7 @@ export const handleFrontendError = (error, message) => {
         method: 'POST',
         body: {
           content: JSON.stringify({
-            error: error.toString(),
+            error,
             message,
           }),
         },

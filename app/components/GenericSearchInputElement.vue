@@ -11,10 +11,11 @@ defineProps({
   },
 });
 
-const emit = defineEmits(['search']);
+const emit = defineEmits(['search', 'clear']);
 </script>
 
 <template>
+  <!-- GenericSearchInputElement.vue -->
   <div class="search-input-container">
     <Icon
       name="uil:search"
@@ -28,10 +29,24 @@ const emit = defineEmits(['search']);
       :placeholder="placeholder"
       @input="emit('search')"
     >
+
+    <Icon
+      name="uil:times"
+      class="close-icon"
+      size="20"
+      @click="emit('clear')"
+    />
   </div>
 </template>
 
 <style scoped>
+.close-icon {
+  color: var(--color-input-text);
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+}
+
 .search-icon {
   color: var(--color-disabled);
   left: 10px;

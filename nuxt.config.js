@@ -38,6 +38,10 @@ export default defineNuxtConfig({
   // available in the app folder (client-side) and the sever folder (server-side).
   // with the funtion useRuntimeConfig()
   runtimeConfig: {
+    B2_APPLICATION_KEY: process.env.B2_APPLICATION_KEY,
+    B2_APPLICATION_KEY_ID: process.env.B2_APPLICATION_KEY_ID,
+    B2_BUCKET_ID: process.env.B2_BUCKET_ID,
+    B2_BUCKET_NAME: process.env.B2_BUCKET_NAME,
     DB_CONNECTION_STRING: process.env.DB_CONNECTION_STRING,
     EMAILABLE_API_KEY: process.env.EMAILABLE_API_KEY,
     SESSION_MAX_AGE_DAYS: process.env.SESSION_MAX_AGE_DAYS,
@@ -48,6 +52,14 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: '2026-02-21',
+  nitro: {
+    experimental: {
+      tasks: true,
+    },
+    scheduledTasks: {
+      '0 3 * * 1': ['tasks:delete-unused-backblaze-files'],
+    },
+  },
   eslint: {
     config: {
       stylistic: true,

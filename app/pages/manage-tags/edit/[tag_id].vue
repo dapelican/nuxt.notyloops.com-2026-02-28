@@ -9,13 +9,11 @@ useSeoMeta({
 
 const route = useRoute();
 
-const tag_id = route.params.tag_id;
-
-const page_number = route.query.page_number;
-
+const error_tag_already_exists = ref(false);
+const handling_request = ref(true);
 const label = ref('');
-
-const handling_request_1 = ref(true);
+const page_number = route.query.page_number;
+const tag_id = route.params.tag_id;
 
 const {
   data: tag_data,
@@ -30,14 +28,10 @@ if (tag_data.value) {
   label.value = tag_data.value.label;
 }
 
-handling_request_1.value = false;
-
-const error_tag_already_exists = ref(false);
-
-const handling_request_2 = ref(false);
+handling_request.value = false;
 
 const updateTag = async () => {
-  handling_request_2.value = true;
+  handling_request.value = true;
 
   try {
     await $fetch('/tags/update', {
@@ -59,7 +53,7 @@ const updateTag = async () => {
 
     handleFrontendError(error, error_message);
   } finally {
-    handling_request_2.value = false;
+    handling_request.value = false;
   }
 };
 
@@ -69,7 +63,7 @@ const resetErrors = () => {
 </script>
 
 <template>
-  <LoadingSpinnerElement v-if="handling_request_1" />
+  <LoadingSpinnerElement v-if="handling_request" />
 
   <main
     v-if="!handling_request"
@@ -113,7 +107,7 @@ const resetErrors = () => {
         <GenericButtonElement
           :design_type="1"
           button_type="submit"
-          :waiting="handling_request_2"
+          :waiting="handling_request"
         >
           {{ $t('t_update') }}
         </GenericButtonElement>

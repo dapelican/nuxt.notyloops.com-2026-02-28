@@ -71,7 +71,9 @@ const isItemSelected = (item_id) => selected_item_id_set.value.has(item_id);
       <tr
         v-for="item in current_page_item_list"
         :key="item.id"
-        :class="{ 'row-selected': isItemSelected(item.id) }"
+        :class="{
+          'row-selected': isItemSelected(item.id),
+        }"
       >
         <td class="col-checkbox">
           <input

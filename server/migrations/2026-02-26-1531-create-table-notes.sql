@@ -4,7 +4,9 @@ CREATE TABLE notes (
   updated_at TIMESTAMPTZ DEFAULT now() NOT NULL,
   deleted_at TIMESTAMPTZ,
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  title TEXT
+  title TEXT,
+  swappable_sides BOOLEAN,
+  swappable_multiple_choice BOOLEAN
 );
 
 CREATE TRIGGER update_notes_timestamp

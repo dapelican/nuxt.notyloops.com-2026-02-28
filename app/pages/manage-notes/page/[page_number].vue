@@ -135,6 +135,11 @@ const onSearchInput = () => {
   }, 400);
 };
 
+const onClearingInput = () => {
+  search_criteria_term.value = '';
+  searchItems();
+};
+
 onMounted(() => {
   searchItems();
 });
@@ -238,11 +243,12 @@ onUnmounted(() => {
             @update:selected_tag_id_list="onTagFilterChange"
           />
 
-          <GenericSearchInputTestElement
+          <GenericSearchInputElement
             v-if="show_search_input"
             v-model="search_criteria_term"
             :placeholder="$t('t_search_notes')"
             @search="onSearchInput"
+            @clear="onClearingInput"
           />
         </div>
 

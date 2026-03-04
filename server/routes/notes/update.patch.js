@@ -21,6 +21,10 @@ import {
 } from '../../helpers/handle-backend-error.js';
 
 import {
+  sanitizeHtml,
+} from '../../helpers/sanitize-html.js';
+
+import {
   verifySessionAndReturnUser,
 } from '../../helpers/verify-session-and-return-user.js';
 
@@ -37,9 +41,9 @@ export default defineEventHandler(async (event) => {
     }
 
     const {
+      note_details,
       note_id,
       title,
-      note_details,
     } = await readBody(event);
 
     if (!note_id || !title) {
@@ -62,7 +66,7 @@ export default defineEventHandler(async (event) => {
       setResponseStatus(event, HTTP_CODE_400_BAD_REQUEST);
 
       return {
-        error_message: 'error_invalid_input',
+        error_message: 'error_no_item_found_for_user',
       };
     }
 
@@ -78,18 +82,28 @@ export default defineEventHandler(async (event) => {
 
     for (const detail of note_details) {
       await executeSQLQuery(
-        `INSERT INTO note_details (note_id,
-        position,
-        plain_content,
-        html_content,
-        to_be_hidden,
-        is_correct)
-        VALUES ($1, $2, $3, $4, $5, $6)`,
+        `INSERT INTO note_details (
+          note_id,
+          content_position,
+          content_sub_position,
+          content_type,
+          markdown_content,
+          html_content,
+          file_url,
+          to_be_hidden,
+          is_correct
+        )
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
         [
           note_id,
-          detail.position,
-          detail.plain_content,
-          detail.html_content,
+          detail.content_position,
+          detail.content_sub_position,
+          detail.content_type,
+          detail.markdown_content,
+          detail.markdown_content?.trim()
+            ? sanitizeHtml(detail.markdown_content?.trim())
+            : null,
+          detail.file_url,
           detail.to_be_hidden,
           detail.is_correct,
         ]

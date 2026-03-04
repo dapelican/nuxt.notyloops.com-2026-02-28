@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
 
     if (search_term) {
       const search_idx = parameter_list.length + 1;
-      where_clause_list.push(`(n.title ILIKE $${search_idx} OR EXISTS (SELECT 1 FROM note_details nd WHERE nd.note_id = n.id AND nd.plain_content ILIKE $${search_idx}))`);
+      where_clause_list.push(`(n.title ILIKE $${search_idx} OR EXISTS (SELECT 1 FROM note_details nd WHERE nd.note_id = n.id AND nd.markdown_content ILIKE $${search_idx}))`);
       parameter_list.push(`%${search_term}%`);
     }
 

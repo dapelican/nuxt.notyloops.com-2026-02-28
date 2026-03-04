@@ -2,7 +2,9 @@
   <Html>
     <HeaderElement />
 
-    <NuxtPage class="page" />
+    <div class="page">
+      <NuxtPage />
+    </div>
 
     <FooterElement />
   </Html>

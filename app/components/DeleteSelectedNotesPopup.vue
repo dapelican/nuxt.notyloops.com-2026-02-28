@@ -1,6 +1,8 @@
 <script setup>
 const {
   clearSelection,
+  page_number,
+  searchItems,
   selected_item_id_set,
 } = useSearchAndSelectItems(ITEM_TYPE_NOTE);
 
@@ -24,9 +26,15 @@ const deleteNotes = async () => {
         note_id_list: [...selected_item_id_set.value],
       },
     });
+
     clearSelection();
     show_popup.value = false;
-    navigateTo('/manage-notes/page/1');
+
+    if (page_number.value === 1) {
+      searchItems();
+    } else {
+      navigateTo('/manage-notes/page/1');
+    }
   } catch (error) {
     handleFrontendError(error, error?.data?.error_message);
   } finally {

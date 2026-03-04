@@ -4,17 +4,19 @@ definePageMeta({ middleware: 'auth' });
 const { t } = useI18n();
 
 useSeoMeta({
-  title: `${t('t_add_note')} | OptiLeague`,
+  title: `${t('t_update_note')} | OptiLeague`,
 });
 
-const handling_request = ref(false);
-const note_details = ref([]);
-const selected_tag_id_list = ref([]);
-const title = ref('');
+const route = useRoute();
 
 const {
   all_user_tag_list,
 } = useSearchAndSelectItems(ITEM_TYPE_TAG);
+const handling_request = ref(true);
+const note_details = ref([]);
+const note_id = route.params.note_id;
+const selected_tag_id_list = ref([]);
+const title = ref('');
 
 const {
   data: tag_data,
@@ -28,6 +30,30 @@ if (tag_error.value) {
 if (tag_data.value) {
   all_user_tag_list.value = tag_data.value.all_user_tag_list;
 }
+
+const {
+  data: note_data,
+  error: note_error,
+} = await useFetch(`/notes/${note_id}`);
+
+if (note_error.value) {
+  handleFrontendError(null, note_error.value.data?.error_message);
+}
+
+if (note_data.value) {
+  note_details.value = note_data.value.note_detail_list
+    .map((detail) => ({
+      ...detail,
+      content_position: detail.content_position,
+      content_sub_position: detail.content_sub_position,
+      display_label: `${detail.content_position}-${detail.content_sub_position}`,
+      multiple_choice: Boolean(detail.content_sub_position),
+    }));
+  selected_tag_id_list.value = note_data.value.tag_list;
+  title.value = note_data.value.title;
+}
+
+handling_request.value = false;
 
 const addText = () => {
   note_details.value.push({
@@ -89,12 +115,12 @@ const updateSelectedTagIdList = (new_tag_id_list) => {
   selected_tag_id_list.value = new_tag_id_list;
 };
 
-const createNote = async () => {
+const updateNote = async () => {
   handling_request.value = true;
 
   try {
-    await $fetch('/notes/create', {
-      method: 'POST',
+    await $fetch('/notes/update', {
+      method: 'PATCH',
       body: {
         title: title.value,
         note_details: computed_details.value.map((d) => ({
@@ -106,6 +132,7 @@ const createNote = async () => {
           to_be_hidden: d.to_be_hidden,
           is_correct: d.is_correct,
         })),
+        note_id,
         tag_id_list: selected_tag_id_list.value,
       },
     });
@@ -121,12 +148,17 @@ const createNote = async () => {
 </script>
 
 <template>
-  <main class="centered-max-width-650">
+  <LoadingSpinnerElement v-if="handling_request" />
+
+  <main
+    v-else
+    class="centered-max-width-650"
+  >
     <h1 class="center">
-      {{ $t('t_add_note') }}
+      {{ $t('t_update_note') }}
     </h1>
 
-    <form @submit.prevent="createNote">
+    <form @submit.prevent="updateNote">
       <h2>
         {{ $t('t_title') }}
       </h2>
@@ -173,10 +205,14 @@ const createNote = async () => {
           rows="5"
         />
 
-        <ImageDisplayerElement
+        <figure
           v-if="detail.content_type === 'image' && note_details[index].file_url"
-          :image_url="note_details[index].file_url"
-        />
+          class="image-displayer-element"
+        >
+          <ImageDisplayerElement
+            :image_url="note_details[index].file_url"
+          />
+        </figure>
 
         <div class="checkboxes-with-trash">
           <div>
@@ -270,7 +306,7 @@ const createNote = async () => {
           button_type="submit"
           :waiting="handling_request"
         >
-          {{ $t('t_save') }}
+          {{ $t('t_update') }}
         </GenericButtonElement>
       </nav>
     </form>
@@ -316,5 +352,9 @@ const createNote = async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.image-displayer-element {
+  margin-bottom: 0.5rem;
 }
 </style>

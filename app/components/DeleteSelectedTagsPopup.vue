@@ -1,7 +1,9 @@
 <script setup>
 const {
   clearSelection,
+  page_number,
   selected_item_id_set,
+  searchItems,
 } = useSearchAndSelectItems(ITEM_TYPE_TAG);
 
 const show_popup = ref(false);
@@ -24,9 +26,15 @@ const deleteTags = async () => {
         tag_id_list: [...selected_item_id_set.value],
       },
     });
+
     clearSelection();
     show_popup.value = false;
-    navigateTo('/manage-tags/page/1');
+
+    if (page_number.value === 1) {
+      searchItems();
+    } else {
+      navigateTo('/manage-tags/page/1');
+    }
   } catch (error) {
     console.error(error);
     console.error(error?.data?.error_message);

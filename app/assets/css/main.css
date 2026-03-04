@@ -302,6 +302,19 @@ h4 {
   width: 100%;
 }
 
+.input-type-textarea {
+  background-color: inherit;
+  border: 1px solid var(--color-main);
+  border-radius: 5px;
+  color: var(--color-input-text);
+  font-family: inherit;
+  font-size: inherit;
+  max-width: 650px;
+  padding: 0.5rem;
+  white-space: pre-line;
+  width: 100%;
+}
+
 .pseudo-link {
   color: var(--color-main);
   cursor: pointer;

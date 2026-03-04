@@ -3,9 +3,12 @@ CREATE TABLE note_details (
   created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
   updated_at TIMESTAMPTZ DEFAULT now() NOT NULL,
   note_id UUID NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
-  position INT NOT NULL,
-  plain_content TEXT NOT NULL,
-  html_content TEXT NOT NULL,
+  content_position INT NOT NULL,
+  content_sub_position INT,
+  content_type TEXT NOT NULL,
+  markdown_content TEXT,
+  html_content TEXT,
+  file_url TEXT,
   to_be_hidden BOOLEAN,
   is_correct BOOLEAN
 );
